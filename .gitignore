@@ -1,0 +1,7 @@
+__pycache__/
+suporte/
+old-ver/
+draft.ipynb
+etl_dag.py
+venv-analise-macro
+.ipynb_checkpoints/
