@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 def scrap_selic() -> list[list[str]]:
     '''
     Extrai os dados da tabela contida no site do Banco Central do Brasil por meio de um browser headless.
