@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 def scrap_feriados() -> pd.DataFrame:
     url = 'https://www.inf.ufrgs.br/~cabral/tabela_pascoa.html'
     feriados_data = requests.get(url).text
+    feriados_soup = BeautifulSoup(feriados_data, 'html5lib')
+    feriados_tabela = feriados_soup.find_all("table")
     feriados_df = pd.read_html(str(feriados_tabela))[0]
     return feriados_df
 
@@ -33,11 +35,15 @@ def main():
     feriados_cols = feriados_df.columns
     
     for feriado_col in feriados_cols:
-        feriados_df[feriado_col] = feriados_df[feriado_col].replace(meses_num, regex=True)
-        feriados_df[feriado_col] = pd.to_datetime(feriados_df[feriado_col], format="%d/%m/%Y")
+        feriados_df[feriado_col] = feriados_df[feriado_col]\
+                .replace(MESES_NUM, regex=True)
+        feriados_df[feriado_col] = pd.to_datetime(
+                feriados_df[feriado_col], format="%d/%m/%Y"
+        )
     
-    feriados_df['Pré Carnaval'] = feriados_df['Carnaval'] + pd.Timedelta(days = -1)
-    feriados_df.to_csv('dados/feriadosi.csv')
+    feriados_df['Pré Carnaval'] = feriados_df['Carnaval'] +\
+            pd.Timedelta(days = -1)
+    feriados_df.to_csv('../dados/feriados.csv', index = False)
 
 if __name__ == '__main__':
     main()
