@@ -1,7 +1,8 @@
 #THIS IS AN EASIER WAY TO SETUP FOR AIRFLOW
 #
 
-pip install -e . &&
-pip install requirements_dag.py &&
+eval $(cat .env) && \
+pip install -e . && \
+pip install requirements_dag.py && \
 airflow db migrate 
 
