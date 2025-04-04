@@ -1,7 +1,6 @@
 __pycache__/
 suporte/
 old-ver/
-draft.ipynb
-etl_dag.py
+etl_scripts.egg-info/
 venv-analise-macro
 .ipynb_checkpoints/

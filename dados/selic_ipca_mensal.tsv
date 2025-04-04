@@ -1,4 +1,4 @@
-periodo_mes	selic_acumulada_mes	meta_acumulada_mes	mes	ano	ipca_no_ano	ipca_var_mensal	decada	periodo_timeformat
+periodo_mes	selic_acumulada_nomes	meta_acumulada_nomes	mes	ano	ipca_no_ano	ipca_var_mensal	decada	periodo_timeformat
 1996-07	1.9285287332209577		JUL	1996	7.74	1.11	1990	1996-07-01
 1996-08	1.9678896186422712		AGO	1996	8.22	0.44	1990	1996-08-01
 1996-09	1.9040539286274027		SET	1996	8.38	0.15	1990	1996-09-01
