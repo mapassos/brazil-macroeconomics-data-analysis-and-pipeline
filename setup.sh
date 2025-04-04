@@ -4,7 +4,7 @@
 mkdir airflow && \
 eval $(cat .env) && \
 pip install -e . && \
-pip install -r requirements_dag.py && \
+pip install -r $WORK_ENV/requirements_dag.txt && \
 airflow db migrate && \
 mv dags airflow
 
