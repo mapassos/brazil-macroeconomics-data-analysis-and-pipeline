@@ -33,11 +33,11 @@ basis which was done following the 252 working days.
 
 ```
 .
-├── Analise-Selic-IPCA-pt1.ipynb
-├── Analise-Selic-IPCA-pt2.ipynb
+├── Analise_de_Dados.ipynb
+├── Data_Analysis.ipynb
 ├── Dockerfile
+├── ETL_planejamento.ipynb
 ├── ETL_planning.ipynb
-├── Interest_Inflation_rates_data analys.b
 ├── README.md
 ├── dados
 │   ├── feriados.csv
@@ -114,7 +114,7 @@ basis which was done following the 252 working days.
 | ipca_acumulado_ano        | IPCA acumulado no ano <br/> (Annual accumulated inflation rate)           | 
 
 
-## How to setup the pipeline using aiflow
+## How to setup Airflow
 
 ![etl](etl-airflow.png)
 
