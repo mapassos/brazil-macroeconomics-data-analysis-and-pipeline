@@ -49,7 +49,7 @@ def read_ipca(path: str) -> pd.DataFrame:
 
 
 def transform_selic(selic_df: pd.DataFrame, filter_df: pd.DataFrame) -> tuple(pd.DataFrame, pd.Dataframe):
-    #read feriados_file
+    #set name to filter file (feriados)
     feriados_df = filter_df
 
     #standardizing the column before the split
@@ -86,11 +86,12 @@ def transform_selic(selic_df: pd.DataFrame, filter_df: pd.DataFrame) -> tuple(pd
 
     #prior to 1993-03-04 there was no meta selic
     selic_df.loc[selic_df['reuniao_data'] < '1999-03-04', 'meta_selic_pctaa'] = np.nan
-    #drop row for change that didnt come into efect 
+
+    #drop row for selic rate that didnt come into effect 
     selic_df = selic_df.drop(selic_df[selic_df['reuniao_data'] ==  '1997-10-22'].index, axis = 0)
 
-    #resampling to daily
-    resampledselic_df = selic_df[['vigencia_inicio', 'taxa_selic_pctaa', 'meta_selic_pctaa']]\
+    #upsampling to daily
+    resampled_selic_df = selic_df[['vigencia_inicio', 'taxa_selic_pctaa', 'meta_selic_pctaa']]\
             .set_index('vigencia_inicio')\
             .apply(lambda x: np.power(1 + x/100, 1/252))\
             .resample('B')\
@@ -100,48 +101,59 @@ def transform_selic(selic_df: pd.DataFrame, filter_df: pd.DataFrame) -> tuple(pd
     for feriado in feriados_df:
         feriados_df[feriado] = pd.to_datetime(feriados_df[feriado])
     
-    #converting to DatetimeIndex
+    #getting a dataframe of DatetimeIndex dates
     feriados_df = feriados_df.unstack().to_frame().set_index(0)
 
-    #upsampling
-    selicmensal_df = resampledselic_df[~resampledselic_df.index.isin(feriados_df.index)]\
+    #downsampling to month
+    selic_mensal_df = resampled_selic_df[~resampled_selic_df.index.isin(feriados_df.index)]\
         .resample('M')\
         .prod()\
         .apply(lambda x: (x - 1) * 100)
-    selicmensal_df = selicmensal_df.iloc[:-1, :]
+    selic_mensal_df = selic_mensal_df.iloc[:-1, :]
 
-    #setting to period and renaming
-    selicmensal_df.index = selicmensal_df.index.to_period()
-    selicmensal_df = selicmensal_df.reset_index()
-    selicmensal_df = selicmensal_df.rename(columns = {
+    #setting to period and renaming cols
+    selic_mensal_df.index = selic_mensal_df.index.to_period()
+    selic_mensal_df = selic_mensal_df.reset_index()
+    selic_mensal_df = selic_mensal_df.rename(columns = {
         'vigencia_inicio': 'periodo_mes', 
-        'meta_selic_pctaa': 'meta_acumulada_nomes', 
-        'taxa_selic_pctaa': 'selic_acumulada_nomes'
+        'meta_selic_pctaa': 'meta_acumulada_mes', 
+        'taxa_selic_pctaa': 'selic_acumulada_mes'
     })   
     
+    #limiting by only closed months
+    selic_mensal_df = selic_mensal_df.iloc[:-1, :]
+
     #0 to nan
-    selicmensal_df['meta_acumulada_nomes'] = selicmensal_df['meta_acumulada_nomes'].replace(0, np.nan)
+    selic_mensal_df['meta_acumulada_mes'] = selic_mensal_df['meta_acumulada_mes'].replace(0, np.nan)
+    
     
 
-    #multiplying each factor for a month 
-    selicnoano_df = resampledselic_df[~resampledselic_df.index.isin(feriados_df.index)]\
+    '''---------YEAR DATASET----------'''
+
+    #downsampling to yearly data
+    selic_anual_df = resampled_selic_df[~resampled_selic_df.index.isin(feriados_df.index)]\
         .resample('Y')\
         .prod()\
         .apply(lambda x: (x - 1) * 100)
-    selicnoano_df = selicnoano_df.reset_index()
+    selic_anual_df = selic_anual_df.reset_index()
 
     #rename cols
-    selicnoano_df = selicnoano_df.rename(columns = {
+    selic_anual_df = selic_anual_df.rename(columns = {
         'vigencia_inicio': 'ano',
-        'taxa_selic_pctaa': 'selic_acumulada_noano',
-        'meta_selic_pctaa' : 'meta_acumulada_noano'
+        'taxa_selic_pctaa': 'selic_acumulada_ano',
+        'meta_selic_pctaa' : 'meta_acumulada_ano'
     })
 
+    #create column ano (year)
+    selic_anual_df['ano'] = selic_anual_df['ano'].dt.year
 
-    selicnoano_df['ano'] = selicnoano_df['ano'].dt.year
-    selicnoano_df['meta_acumulada_nomes'] = selicmensal_df['meta_acumulada_nomes'].replace(0, np.nan)
+    #limit the data to only closed years
+    selic_anual_df = selic_anual_df.iloc[:-1, :]
 
-    return selicmensal_df, selicnoano_df
+    #replace zeros 
+    selic_anual_df['meta_acumulada_ano'] = selic_anual_df['meta_acumulada_ano'].replace(0, np.nan)
+
+    return selic_mensal_df, selic_anual_df
 
 def transform_ipca(ipca_df: pd.DataFrame) -> tuple(pd.DataFrame, pd.DataFrame):
     MESES_NUMCAP = {
@@ -159,7 +171,7 @@ def transform_ipca(ipca_df: pd.DataFrame) -> tuple(pd.DataFrame, pd.DataFrame):
         'DEZ': '12'
     }
     
-    #setting types
+    #filling and setting type str
     ipca_df['ano'] = ipca_df['ano'].ffill().astype('str')
     
     #month to numeric
@@ -168,7 +180,7 @@ def transform_ipca(ipca_df: pd.DataFrame) -> tuple(pd.DataFrame, pd.DataFrame):
     #formating for type change PeriodIndex
     ipca_df['periodo_mes'] = ipca_df['ano'] + '-' + ipca_df['mes_num']
 
-    #settign format PeriodIndex
+    #setting format to PeriodIndex
     ipca_df['periodo_mes'] = pd.PeriodIndex(ipca_df['periodo_mes'], freq='M')
     
     #setting the numeric types
@@ -179,17 +191,28 @@ def transform_ipca(ipca_df: pd.DataFrame) -> tuple(pd.DataFrame, pd.DataFrame):
                 ipca_df[ipca_df.columns[ii]]
         )
 
-    #choose features of interest
-    ipca_df = ipca_df[['mes', 'periodo_mes', 'ano', 'ipca_no_ano', 'ipca_var_mensal']].copy()
+    #changing ipca_var_mensal column name
+    ipca_df = ipca_df.rename(columns =  {
+        'ipca_var_mensal' : 'ipca_mes'
+    })
 
-    #create a new column: decada
-    ipca_df.loc[:, 'decada'] = (np.floor(ipca_df.loc[:, 'ano'] / 10) * 10).astype('int')
+    #create decada column
+    ipca_df['decada'] = (np.floor(ipca_df['ano'] / 10) * 10).astype('int')
+
+    #choose feature of interest for monthly df in right order
+    ipca_mensal_df = ipca_df[['periodo_mes', 'mes', 'ano', 'decada' ,'ipca_mes']]
+    
+
+    '''--------------YEAR VERSION---------------'''
+
+    #choose features of interest for annual df in right order
+    ipca_anual_df = ipca_df[['periodo_mes', 'mes', 'ano', 'decada', 'ipca_acumulado_ano', 'ipca_mes']].copy()
 
     #create yearly df
-    ipca_noano_df = ipca_df.groupby('ano')[['ipca_no_ano', 'decada']]\
+    ipca_anual_df = ipca_anual_df.groupby('ano')[['ipca_acumulado_ano', 'decada']]\
             .last().reset_index()
 
-    return ipca_df, ipca_noano_df
+    return ipca_mensal_df, ipca_anual_df
 
 def merge_dfs(
     df_left: pd.DataFrame, 
@@ -219,14 +242,32 @@ def run_pipeline():
 
     feriados_df = pd.read_csv(os.path.join(DATA_PATH, 'feriados.csv'))
 
-    selic_df, selic_ano_df = transform_selic(selic_df, feriados_df)
-    ipca_df, ipca_ano_df = transform_ipca(ipca_df)
+    selic_mensal_df, selic_anual_df = transform_selic(selic_df, feriados_df)
+    ipca_mensal_df, ipca_anual_df = transform_ipca(ipca_df)
 
-    df_mensal = merge_dfs(selic_df, ipca_df, 'periodo_mes')
-    df_anual = merge_dfs(selic_ano_df, ipca_ano_df, 'ano')
+    df_mensal = merge_dfs(selic_mensal_df, ipca_mensal_df, 'periodo_mes')
+    df_anual = merge_dfs(selic_anual_df, ipca_anual_df, 'ano')
 
-    save_to_csv(df_mensal, os.path.join(DATA_PATH, 'selic_ipca_mensal.tsv'))
-    save_to_csv(df_anual, os.path.join(DATA_PATH, 'selic_ipca_noano.tsv'))
+    df_mensal = df_mensal[[
+        'periodo_mes', 
+        'mes', 
+        'ano', 
+        'decada', 
+        'meta_acumulada_mes', 
+        'selic_acumulada_mes', 
+        'ipca_mes'
+    ]]    
+
+    df_anual = df_anual[[
+        'ano', 
+        'decada', 
+        'meta_acumulada_ano', 
+        'selic_acumulada_ano', 
+        'ipca_acumulado_ano'
+    ]]
+
+    save_to_csv(df_mensal, os.path.join(DATA_PATH, 'selic_ipca_mes.tsv'))
+    save_to_csv(df_anual, os.path.join(DATA_PATH, 'selic_ipca_ano.tsv'))
 
 
 if __name__ == '__main__':
