@@ -6,7 +6,6 @@ This project aims to study the Brazillian interest rate and inflation rate lever
 that is available in the internet. 
 This repository contains a jupyter notebook detailing how I did concept the ETL process and a second jupyter notebook with
 data analysis of the transformed data. The ETL process is now orchestrated using Apache Airflow.
-What is next: pandera, do more analysis. 
 
 ## Project summary
 
@@ -37,12 +36,14 @@ basis which was done following the 252 working days.
 ├── Analise-Selic-IPCA-pt1.ipynb
 ├── Analise-Selic-IPCA-pt2.ipynb
 ├── Dockerfile
+├── ETL_planning.ipynb
+├── Interest_Inflation_rates_data analys.b
 ├── README.md
 ├── dados
 │   ├── feriados.csv
 │   ├── selic.tsv
-│   ├── selic_ipca_mensal.tsv
-│   ├── selic_ipca_noano.tsv
+│   ├── selic_ipca_ano.tsv
+│   ├── selic_ipca_mes.tsv
 │   └── selic_transformacao_preliminar.tsv
 ├── dags
 │   └── etl_dag.py
@@ -64,29 +65,27 @@ basis which was done following the 252 working days.
 
 ### Schema of the extracted data 
 #### Interest Rate (Selic)
-| Variável <br/> (Variable) | Descrição <br/> (Description)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| reuniao_num               | Classificação ordinal da reunião do Copom <br/>(Ordinal classification of the Copom's meeting)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| reuniao_data              | Data da reunião <br/>(Copom meeting's date)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| reuniao_vies              | Indicativo de tendência de mudança da taxa Selic. Essa mudança pode ser feita na meta, na direção do viés, para a taxa Selic a qualquer momento entre as reuniões ordinárias. <br/> (The indicated bias for the upcoming change in the target interest rate. This change may be implemented in accordance with the bias, at any time.)                                                                                                                                                                                                                                                                |
-| periodo_vigencia          | Periodo em que a meta selic fica vigente.<br/> (The time period which the target interest rate is /was in place.)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |                                  
-| meta_selic_pctaa          | Meta de juros (anual) como referência.<br/> (The established annual interest rate, set as a reference)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| tban_pctam                | Taxa de Assistência do Banco Central: é uma taxa cobrada em empréstimos quando bancos não possuem títulos públicos para oferecer como garantia, ou quando superam os limites de crédito da linha que utiliza a Taxa Básica do banco central. A TBAN foi criada em 28/8/96 e extinta em 4/3/99. (The Brazillian Central Bank Assistance Rate is an instrument that is charged on loans when banks do not have government bonds to offer as collateral or when they exceed the credit limits of the line that uses the Central Bank's Basic Rate.)                                                      |
+| Variável <br/> (Variable) | Descrição <br/> (Description)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+|---------------------------|-------------------------------|
+| reuniao_num               | Classificação ordinal da reunião do Copom <br/>(Ordinal classification of the Copom's meeting) |
+| reuniao_data              | Data da reunião <br/>(Copom meeting's date)  |
+| reuniao_vies              | Indicativo de tendência de mudança da taxa Selic. Essa mudança pode ser feita na meta, na direção do viés, para a taxa Selic a qualquer momento entre as reuniões ordinárias. <br/> (The indicated bias for the upcoming change in the target interest rate. This change may be implemented in accordance with the bias, at any time.) |
+| periodo_vigencia          | Periodo em que a meta selic fica vigente.<br/> (The time period which the target interest rate is /was in place.) |                                  
+| meta_selic_pctaa          | Meta de juros (anual) como referência.<br/> (The established annual interest rate, set as a reference) |
+| tban_pctam                | Taxa de Assistência do Banco Central: é uma taxa cobrada em empréstimos quando bancos não possuem títulos públicos para oferecer como garantia, ou quando superam os limites de crédito da linha que utiliza a Taxa Básica do banco central. A TBAN foi criada em 28/8/96 e extinta em 4/3/99. (The Brazillian Central Bank Assistance Rate is an instrument that is charged on loans when banks do not have government bonds to offer as collateral or when they exceed the credit limits of the line that uses the Central Bank's Basic Rate.)     |
 | taxa_selic_pct            | Taxa média ponderada e ajustada dos financiamentos diários apurados no Sistema Especial de Liquidação e de Custódia (Selic) para operações compromissadas de um dia (overnight) lastreadas em títulos públicos federais, acumulada no período. Títulos públicos são títulos emitidos pelo governo federal e são utilizados por ele para se financiar. <br/> (The weighted and adjusted average of the daily financing transactions calculated by the SELIC (a Special Settlement and Custody System) to the one-day repurchase operations backed by government bonds and accumulated over the period. |
-| taxa_selic_pctaa          | Taxa selic anualizada com base em 252 dias úteis. <br/>(The annual interest rate based on 252 working days)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| taxa_selic_pctaa          | Taxa selic anualizada com base em 252 dias úteis. <br/>(The annual interest rate based on 252 working days) |
 
 #### Inflation Rate (IPCA)
 
-| Variável (Variable)   | Descrição (Description)                                                                                                                                                                                                                            |
-|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ano                   | Ano numérico <br/> (4-digit numeric Year)                                                                                                                                                                                                          |
-| mes                   | Nome do mês limitado a três letras (Name of the month limited to three letters)                                                                                                                                                                    |
-| ipca_numero_indice    | Média aritmética ponderada dos 16 índices metropolitanos mensais, que são calculados pela fórmula de Laspeyres. <br/>(Weighted arithmetic average of the 16 monthly average Brazillian metropolitan indeces, computed using the Laspeyres Formula) |                                                                                                                       
-| ipca_var_mensal       | Variação mensal do índice durante o mês. <br/> (Monthly variation of the IPCA index over a month)                                                                                                                                                  |                                                                                                                                                
-| ipca_var_trimestral   | Variação trimestral do índice considerando os últimos 3 meses. <br/> (Quarterly variation of the index considering the last 3 months)                                                                                                              |                                          
-| ipca_var_semetral     | Variação semestral do índice considerando os últimos 6 meses. <br/> (Six-month change in the index over the last 6 months.)                                                                                                                        |                                  
-| ipca_no_ano           | Variação do índice no mês referência em relação ao índice de dezembro do ano passado ao ano de referência. (IPCA index variation in the reference month compared to the index in December of the previous year, for the reference year.) </td>     
-| ipca_acumulado_ano    | Soma da variação mensal de 12 meses. <br/> (Annual variation sum over 12 months )                                                                                                                                                                  | 
+| Variável (Variable)   | Descrição (Description)                                                                                                                                                                                                                            
+|-----------------------|----------------------------------------------------------------------------------|
+| ano                   | Ano numérico <br/> (4-digit numeric Year)                                          |
+| mes                   | Nome do mês limitado a três letras (Name of the month limited to three letters)    |
+| ipca_numero_indice    | Média aritmética ponderada dos 16 índices metropolitanos mensais, que são calculados pela fórmula de Laspeyres. <br/>(Weighted arithmetic average of the 16 monthly average Brazillian metropolitan indeces, computed using the Laspeyres Formula) |        | ipca_var_mensal       | Variação mensal do índice durante o mês. <br/> (Monthly variation of the IPCA index over a month)  |             | ipca_var_trimestral   | Variação trimestral do índice considerando os últimos 3 meses. <br/> (Quarterly variation of the index considering the last 3 months)   |                                          
+| ipca_var_semetral     | Variação semestral do índice considerando os últimos 6 meses. <br/> (Six-month change in the index over the last 6 months.)    |         
+| ipca_no_ano           | Variação do índice no mês referência em relação ao índice de dezembro do ano passado ao ano de referência.<br/> (IPCA index variation in the reference month compared to the index in December of the previous year, for the reference year.) |   
+| ipca_acumulado_ano    | Soma da variação mensal de 12 meses. <br/> (Annual variation sum over 12 months )   | 
 
 
 ### Output Schemas
@@ -95,7 +94,7 @@ basis which was done following the 252 working days.
 
 | Variável <br/> (Variable) | Descrição  <br/>(Description)                                                             |
 |---------------------------|-------------------------------------------------------------------------------------------|
-| periodo-mes               | Período no formato YYYY-MM  <br/> (YYYY-MM format month)                                          |
+| periodo-mes               | Período no formato YYYY-MM  <br/> (YYYY-MM format month)                                  |
 | mes                       | Mês texto com três letras inicias <br/> (The first three letters of the respective month) |
 |  ano                      | Ano <br/> (4-digit year)                                                                  |	
 | decada                    | Década <br/> (4-digit decade)                                                             |
@@ -116,6 +115,8 @@ basis which was done following the 252 working days.
 
 
 ## How to setup the pipeline using aiflow
+
+![etl](etl-airflow.png)
 
 You can start by creating a virtual environment using venv or virtualenv
 
