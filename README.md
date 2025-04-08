@@ -33,11 +33,11 @@ basis which was done following the 252 working days.
 
 ```
 .
-├── Analise-Selic-IPCA-pt1.ipynb
-├── Analise-Selic-IPCA-pt2.ipynb
+├── Analise_de_Dados.ipynb
+├── Data_Analysis.ipynb
 ├── Dockerfile
+├── ETL_planejamento.ipynb
 ├── ETL_planning.ipynb
-├── Interest_Inflation_rates_data analys.b
 ├── README.md
 ├── dados
 │   ├── feriados.csv
@@ -72,7 +72,7 @@ basis which was done following the 252 working days.
 | reuniao_vies              | Indicativo de tendência de mudança da taxa Selic. Essa mudança pode ser feita na meta, na direção do viés, para a taxa Selic a qualquer momento entre as reuniões ordinárias. <br/> (The indicated bias for the upcoming change in the target interest rate. This change may be implemented in accordance with the bias, at any time.) |
 | periodo_vigencia          | Periodo em que a meta selic fica vigente.<br/> (The time period which the target interest rate is /was in place.) |                                  
 | meta_selic_pctaa          | Meta de juros (anual) como referência.<br/> (The established annual interest rate, set as a reference) |
-| tban_pctam                | Taxa de Assistência do Banco Central: é uma taxa cobrada em empréstimos quando bancos não possuem títulos públicos para oferecer como garantia, ou quando superam os limites de crédito da linha que utiliza a Taxa Básica do banco central. A TBAN foi criada em 28/8/96 e extinta em 4/3/99. (The Brazillian Central Bank Assistance Rate is an instrument that is charged on loans when banks do not have government bonds to offer as collateral or when they exceed the credit limits of the line that uses the Central Bank's Basic Rate.)     |
+| tban_pctam                | Taxa de Assistência do Banco Central: foi uma taxa cobrada em empréstimos quando bancos não possuem títulos públicos para oferecer como garantia, ou quando superam os limites de crédito da linha que utiliza a Taxa Básica do banco central. A TBAN foi criada em 28/8/96 e extinta em 4/3/99. (The Brazillian Central Bank Assistance Rate was an instrument that is charged on loans when banks do not have government bonds to offer as collateral or when they exceed the credit limits of the line that uses the Central Bank's Basic Rate.)     |
 | taxa_selic_pct            | Taxa média ponderada e ajustada dos financiamentos diários apurados no Sistema Especial de Liquidação e de Custódia (Selic) para operações compromissadas de um dia (overnight) lastreadas em títulos públicos federais, acumulada no período. Títulos públicos são títulos emitidos pelo governo federal e são utilizados por ele para se financiar. <br/> (The weighted and adjusted average of the daily financing transactions calculated by the SELIC (a Special Settlement and Custody System) to the one-day repurchase operations backed by government bonds and accumulated over the period. |
 | taxa_selic_pctaa          | Taxa selic anualizada com base em 252 dias úteis. <br/>(The annual interest rate based on 252 working days) |
 
@@ -114,7 +114,7 @@ basis which was done following the 252 working days.
 | ipca_acumulado_ano        | IPCA acumulado no ano <br/> (Annual accumulated inflation rate)           | 
 
 
-## How to setup the pipeline using aiflow
+## How to setup Airflow
 
 ![etl](etl-airflow.png)
 
