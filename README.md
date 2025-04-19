@@ -1,33 +1,26 @@
 # Analise-Dados-Macroeconomicos </br> (Data Analysis of Brazillian Interest Rate and Inflation Rate)
 
 ## Project Description
+The main objective of this project is to analyze both the interest rate (taxa selic) and inflation rate (IPCA) of Brazil and possibly create a simple predictive model. 
+To perform the analysis, I designed an ETL pipeline to:
+* retrieve up-to-date data from official sources
+* preprocess the data
+* and load into a file 
 
-This project aims to study the Brazillian interest rate and inflation rate leveraging the historic-to-current data 
-that is available in the internet. 
-This repository contains a jupyter notebook detailing how I did concept the ETL process and a second jupyter notebook with
-data analysis of the transformed data. The ETL process is now orchestrated using Apache Airflow.
+One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose dockerize this extraction step.
+For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
 
-## Project summary
+The detailed ETL planning can be found in `notebooks/ETL_planning.ipynb` (em português, `notebooks/ETL_planejamento.ipynb`)
+The detaileed data analysis and modelling tentative can be found in `notebooks/Data_Analysis.ipynb` file (em português, `notebooks/ETL_planejamento.ipynb`)
 
-This project started as a way for me to apply some statistical concepts I was studying at the time, primarily 
-related to time series. At that time, I kept hearing a lot about how interest rates were constantly increasing, 
-so I decided to try to understand it better. What I discovered was that interest rates were somehow related to the 
-inflation rate, which led me to start studing it as well.
+You can visualize these notebooks by having [Jupyter](https://docs.jupyter.org/en/latest/) installed or using [Google Colab](https://colab.research.google.com/). 
 
-Since I wanted the studying to be mainly driven by the data, as this is a data science project, my first move was 
-to find where to get all the data that I need. While searching the internet I came across a table hosted on Brazil's 
-Central Bank website that contained the historical-to-current interest rate data, but I had no clue how would I retrieve it. 
-I was only able to extract it using selenium, as the table was dynamically rendered. For the inflation rate, it was easier at first 
-but after reading it with pandas, the data ended up being poorly formated, but I managed to come up with a  clever solution to 
-make it usable.
 
-The next step was data cleaning, so I began checking if each piece of information matched what was available on the web. 
-To my surprise, the interest rate's table had annual and monthly interest rates mixed. It also had date inconsistencies that 
-needed to be corrected before the data could be used. 
+## Project Summary
+This project can be divided into two part:
+How the ETL 
 
-The end goal in the processing phase was to merge both the interest rate and the inflation rate, but while the inflation rate is 
-monthly, the inflation rate had uneven periods, which made the merge not possible. The next task was to turn selic into a monthly 
-basis which was done following the 252 working days.
+
 
 ## Project Structure
 
@@ -61,9 +54,9 @@ basis which was done following the 252 working days.
 └── setup_airflow.sh
 ```
 
-## Schemas
+## Dictionaries
 
-### Schema of the extracted data 
+### Dictionary of the extracted data 
 #### Interest Rate (Selic)
 | Variável <br/> (Variable) | Descrição <br/> (Description)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 |---------------------------|-------------------------------|
@@ -72,7 +65,7 @@ basis which was done following the 252 working days.
 | reuniao_vies              | Indicativo de tendência de mudança da taxa Selic. Essa mudança pode ser feita na meta, na direção do viés, para a taxa Selic a qualquer momento entre as reuniões ordinárias. <br/> (The indicated bias for the upcoming change in the target interest rate. This change may be implemented in accordance with the bias, at any time.) |
 | periodo_vigencia          | Periodo em que a meta selic fica vigente.<br/> (The time period which the target interest rate is /was in place.) |                                  
 | meta_selic_pctaa          | Meta de juros (anual) como referência.<br/> (The established annual interest rate, set as a reference) |
-| tban_pctam                | Taxa de Assistência do Banco Central: foi uma taxa cobrada em empréstimos quando bancos não possuem títulos públicos para oferecer como garantia, ou quando superam os limites de crédito da linha que utiliza a Taxa Básica do banco central. A TBAN foi criada em 28/8/96 e extinta em 4/3/99. (The Brazillian Central Bank Assistance Rate was an instrument that is charged on loans when banks do not have government bonds to offer as collateral or when they exceed the credit limits of the line that uses the Central Bank's Basic Rate.)     |
+| tban_pctam                | Taxa de Assistência do Banco Central: foi uma taxa cobrada em empréstimos quando bancos não possuem títulos públicos para oferecer como garantia, ou quando superam os limites de crédito da linha que utiliza a Taxa Básica do banco central. A TBAN foi criada em 28/8/96 e extinta em 4/3/99. <br/>(The Brazillian Central Bank Assistance Rate was an instrument that is charged on loans when banks do not have government bonds to offer as collateral or when they exceed the credit limits of the line that uses the Central Bank's Basic Rate.)     |
 | taxa_selic_pct            | Taxa média ponderada e ajustada dos financiamentos diários apurados no Sistema Especial de Liquidação e de Custódia (Selic) para operações compromissadas de um dia (overnight) lastreadas em títulos públicos federais, acumulada no período. Títulos públicos são títulos emitidos pelo governo federal e são utilizados por ele para se financiar. <br/> (The weighted and adjusted average of the daily financing transactions calculated by the SELIC (a Special Settlement and Custody System) to the one-day repurchase operations backed by government bonds and accumulated over the period. |
 | taxa_selic_pctaa          | Taxa selic anualizada com base em 252 dias úteis. <br/>(The annual interest rate based on 252 working days) |
 
@@ -81,14 +74,16 @@ basis which was done following the 252 working days.
 | Variável (Variable)   | Descrição (Description)                                                                                                                                                                                                                            
 |-----------------------|----------------------------------------------------------------------------------|
 | ano                   | Ano numérico <br/> (4-digit numeric Year)                                          |
-| mes                   | Nome do mês limitado a três letras (Name of the month limited to three letters)    |
-| ipca_numero_indice    | Média aritmética ponderada dos 16 índices metropolitanos mensais, que são calculados pela fórmula de Laspeyres. <br/>(Weighted arithmetic average of the 16 monthly average Brazillian metropolitan indeces, computed using the Laspeyres Formula) |        | ipca_var_mensal       | Variação mensal do índice durante o mês. <br/> (Monthly variation of the IPCA index over a month)  |             | ipca_var_trimestral   | Variação trimestral do índice considerando os últimos 3 meses. <br/> (Quarterly variation of the index considering the last 3 months)   |                                          
+| mes                   | Nome do mês limitado a três letras  <br/>(Three-first-letters of the respective month's name)    |
+| ipca_numero_indice    | Média aritmética ponderada dos 16 índices metropolitanos mensais, que são calculados pela fórmula de Laspeyres. <br/>(Weighted arithmetic average of the 16 monthly average Brazillian metropolitan indeces, computed using the Laspeyres Formula) |       
+| ipca_var_mensal       | Variação mensal do índice durante o mês. <br/> (Monthly variation of the IPCA index over a month)  |            
+| ipca_var_trimestral   | Variação trimestral do índice considerando os últimos 3 meses. <br/> (Quarterly variation of the index considering the last 3 months)   |
 | ipca_var_semetral     | Variação semestral do índice considerando os últimos 6 meses. <br/> (Six-month change in the index over the last 6 months.)    |         
 | ipca_no_ano           | Variação do índice no mês referência em relação ao índice de dezembro do ano passado ao ano de referência.<br/> (IPCA index variation in the reference month compared to the index in December of the previous year, for the reference year.) |   
 | ipca_acumulado_ano    | Soma da variação mensal de 12 meses. <br/> (Annual variation sum over 12 months )   | 
 
 
-### Output Schemas
+### Output Data Dictionaries
 
 #### Monthly interest and inflation rates
 
@@ -114,32 +109,32 @@ basis which was done following the 252 working days.
 | ipca_acumulado_ano        | IPCA acumulado no ano <br/> (Annual accumulated inflation rate)           | 
 
 
-## How to setup Airflow
+## How to run the ETL in Airflow
 
 ![etl](etl-airflow.png)
 
+The way I designed the ETL requires you to have docker installed.
 You can start by creating a virtual environment using venv or virtualenv
 
-```python
+```bash
 python3 -m venv econvenv
-python3 econvenv/Scripts/activate
+source econvenv/Scripts/activate
 ```
 
 Then you can run setup_airflow.sh 
 
-```python
-bash setup_airflow.sh
+```bash
+bash setup-airflow.sh
 ```
 
-Once the above script is finished, we can check the available dags
-```python
+Once the above script is finished, you can check the available dags ys
+```bash
 airflow dags list
 ```
 
 You can now create an user and run the airflow webserver or use the standalone version 
-```python
+```bash
 airflow standalone
 ```
-
 The standalone will generate an user and a password. 
-
+For further information check [Airflow Docs](https://airflow.apache.org/docs/)

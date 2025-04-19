@@ -4,4 +4,4 @@ old-ver/
 etl_scripts.egg-info/
 venv-analise-macro
 .ipynb_checkpoints/
-ETL_planning.ipynb 
+econvenv/

@@ -18,7 +18,6 @@ def etl():
         def build_selic_image():
             return f'''\
             cd {WORK_ENV}
-            pwd
             docker build -t scrap -f Dockerfile .
             '''
 
