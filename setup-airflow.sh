@@ -1,5 +1,5 @@
-#THIS IS AN EASIER WAY TO SETUP FOR AIRFLOW
-#
+#This is a faster way to set up the Airflow pipeline.
+
 
 mkdir airflow && \
 pip install -e . && \
