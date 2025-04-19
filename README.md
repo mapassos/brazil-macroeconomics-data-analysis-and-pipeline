@@ -68,8 +68,7 @@ A dashboard using dash.
 
 ### Dictionary of the extracted data 
 #### Interest Rate (Selic)
-| Variável <br/> (Variable) | Descrição <br/> (Description)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-|---------------------------|-------------------------------|
+| Variável <br/> (Variable) | Descrição <br/> (Description)  |                   |---------------------------|-------------------------------|
 | reuniao_num               | Classificação ordinal da reunião do Copom <br/>(Ordinal classification of the Copom's meeting) |
 | reuniao_data              | Data da reunião <br/>(Copom meeting's date)  |
 | reuniao_vies              | Indicativo de tendência de mudança da taxa Selic. Essa mudança pode ser feita na meta, na direção do viés, para a taxa Selic a qualquer momento entre as reuniões ordinárias. <br/> (The indicated bias for the upcoming change in the target interest rate. This change may be implemented in accordance with the bias, at any time.) |
@@ -82,13 +81,13 @@ A dashboard using dash.
 #### Inflation Rate (IPCA)
 
 | Variável (Variable)   | Descrição (Description)                                                                                                                                                                                                                            
-|-----------------------|----------------------------------------------------------------------------------|
-| ano                   | Ano numérico <br/> (4-digit numeric Year)                                          |
+|-----------------------|------------------------------|
+| ano                   | Ano numérico <br/> (4-digit numeric Year)    |
 | mes                   | Nome do mês limitado a três letras  <br/>(Three-first-letters of the respective month's name)    |
 | ipca_numero_indice    | Média aritmética ponderada dos 16 índices metropolitanos mensais, que são calculados pela fórmula de Laspeyres. <br/>(Weighted arithmetic average of the 16 monthly average Brazillian metropolitan indeces, computed using the Laspeyres Formula) |       
 | ipca_var_mensal       | Variação mensal do índice durante o mês. <br/> (Monthly variation of the IPCA index over a month)  |            
 | ipca_var_trimestral   | Variação trimestral do índice considerando os últimos 3 meses. <br/> (Quarterly variation of the index considering the last 3 months)   |
-| ipca_var_semetral     | Variação semestral do índice considerando os últimos 6 meses. <br/> (Six-month change in the index over the last 6 months.)    |         
+| ipca_var_semetral     | Variação semestral do índice considerando os últimos 6 meses. <br/> (Six-month change in the index over the last 6 months.)    |
 | ipca_no_ano           | Variação do índice no mês referência em relação ao índice de dezembro do ano passado ao ano de referência.<br/> (IPCA index variation in the reference month compared to the index in December of the previous year, for the reference year.) |   
 | ipca_acumulado_ano    | Soma da variação mensal de 12 meses. <br/> (Annual variation sum over 12 months )   | 
 
@@ -97,32 +96,34 @@ A dashboard using dash.
 
 #### Monthly interest and inflation rates
 
-| Variável <br/> (Variable) | Descrição  <br/>(Description)                                                             |
-|---------------------------|-------------------------------------------------------------------------------------------|
-| periodo-mes               | Período no formato YYYY-MM  <br/> (YYYY-MM format month)                                  |
+| Variável <br/> (Variable) | Descrição  <br/>(Description) |
+|---------------------------|-------------------------------|
+| periodo-mes               | Período no formato YYYY-MM  <br/> (YYYY-MM format month)  |
 | mes                       | Mês texto com três letras inicias <br/> (The first three letters of the respective month) |
-|  ano                      | Ano <br/> (4-digit year)                                                                  |	
-| decada                    | Década <br/> (4-digit decade)                                                             |
-| meta_acumulada_mes        | Meta acumulada no mês <br/> (Monthly accumulated target interest rate.)                   | 
-| selic_acumulada_mes       | Selic acumulada no mês <br/> (Monthly accumulated interest rate.)                         |
-| ipca_mes                  | Inflação no mês  <br/> (Monthly Inflation rate.)                                          |
+|  ano                      | Ano <br/> (4-digit year)   |	
+| decada                    | Década <br/> (4-digit decade)  |
+| meta_acumulada_mes        | Meta acumulada no mês <br/> (Monthly accumulated target interest rate.)    | 
+| selic_acumulada_mes       | Selic acumulada no mês <br/> (Monthly accumulated interest rate.)        |
+| ipca_mes                  | Inflação no mês  <br/> (Monthly Inflation rate.)|
 
 
 #### Annual interest and inflation rates
 
 | Variável <br/> (Variable) | Decrição <br/> (Description)                                              |
-|---------------------------|---------------------------------------------------------------------------|
-| ano                       | Ano numérico com 4 digitos <br/>(4-digit numeric year)                    |
-| decada                    | Década numérica com 4 digitos <br/> (4-digit numeric decade)              | 
+|---------------------------|------------------------------------------|
+| ano                       | Ano numérico com 4 digitos <br/>(4-digit numeric year)    |
+| decada                    | Década numérica com 4 digitos <br/> (4-digit numeric decade)      | 
 | meta_selic_noano          | Meta Selic acumulada no ano<br/> (Annual accumulated target interest rate) |
 | selic_acumulada_ano       | Selic acumulada no ano<br/> (Annual accumulated interest rate)            |
 | ipca_acumulado_ano        | IPCA acumulado no ano <br/> (Annual accumulated inflation rate)           | 
 
 
-## How to run the ETL in Airflow
+## How to run the ETL pipeline in Airflow
 
 ![etl](etl-airflow.png)
 
+
+This is a simple setup and should only be used to test the pipeline.  
 The way I designed the ETL requires you to have docker installed.  
 You can start by creating a virtual environment either with built-in venv or virtualenv.
 
@@ -146,5 +147,5 @@ You can now create an user and run the airflow webserver or use the standalone v
 ```bash
 airflow standalone
 ```
-The standalone will generate an user and a password.   
-For further information check [Airflow Docs](https://airflow.apache.org/docs/)
+The standalone will generate an user and a password.    
+For more information check [Airflow Docs](https://airflow.apache.org/docs/)
