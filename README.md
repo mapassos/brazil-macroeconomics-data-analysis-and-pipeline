@@ -4,8 +4,9 @@
 The main objective of this project is to analyze both the interest rate (taxa selic) and inflation rate (IPCA) of Brazil and possibly create a simple predictive model. To support this, another goal was to create an ETL pipeline.
 
 ## Project Summary
+### ETL
 This project consists into two main parts: ETL and the Data Analysis.  
-The ETL was conceived because the data analysis required me to extract data from their respective sources, Therefore designed an ETL pipeline to:
+The ETL pipeline was developed because the data analysis required pulling data from their respective soutive. Therefore, the ETL goals were to:
 * retrieve up-to-date data
 * clean, transform and create the mothly and annual data
 * and load each data into a tsv file.
@@ -14,15 +15,16 @@ One of the data sources required the use of Selenium. Since I wanted to reduce t
 Another data extraction was necessary because the library holidays did not contain all the necessary holidays necessary to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`
 For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
 
-The conclusion of the data analysis is that there was no correlation between Brazillian interest rate and inflation rate, so a model with these two variable wouldn't be a good mode.
+### Data Analysis
+The conclusion of the data analysis was that there was no significant correlation between Brazillian interest rate and inflation rate, so a model using only these two variables would not be effective.
 
 The detailed ETL planning can be found in `notebooks/ETL_planning.ipynb` (em português, `notebooks/ETL_planejamento.ipynb`)
 The detaileed data analysis and modelling tentative can be found in `notebooks/Data_Analysis.ipynb` file (em português, `notebooks/ETL_planejamento.ipynb`)
 
-You can visualize these notebooks by having [Jupyter](https://docs.jupyter.org/en/latest/) installed or using [Google Colab](https://colab.research.google.com/). 
+You can view these notebooks by using [Jupyter](https://docs.jupyter.org/en/latest/) or [Google Colab](https://colab.research.google.com/). 
 
 ## What is next
-Leverage AWS lambda for the ETL.  
+ETL with AWS.  
 A dashboard using dash.  
 
 ## Project Structure
@@ -135,7 +137,7 @@ Then you can run setup_airflow.sh
 bash setup-airflow.sh
 ```
 
-Once the above script is finished, you can check the available dags with the following
+Once the above script is finished, you can check the available dags
 ```bash
 airflow dags list
 ```
