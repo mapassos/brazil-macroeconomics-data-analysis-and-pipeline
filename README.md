@@ -1,37 +1,39 @@
 # Analise-Dados-Macroeconomicos </br> (Data Analysis of Brazillian Interest Rate and Inflation Rate)
 
 ## Project Description
-The main objective of this project is to analyze both the interest rate (taxa selic) and inflation rate (IPCA) of Brazil and possibly create a simple predictive model. 
-To perform the analysis, I designed an ETL pipeline to:
-* retrieve up-to-date data from official sources
-* preprocess the data
-* and load into a file 
+The main objective of this project is to analyze both the interest rate (taxa selic) and inflation rate (IPCA) of Brazil and possibly create a simple predictive model. To support this, another goal was to create an ETL pipeline.
 
-One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose dockerize this extraction step.
+## Project Summary
+This project consists into two main parts: ETL and the Data Analysis.  
+The ETL was conceived because the data analysis required me to extract data from their respective sources, Therefore designed an ETL pipeline to:
+* retrieve up-to-date data
+* clean, transform and create the mothly and annual data
+* and load each data into a tsv file.
+
+One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose dockerize this step.  
+Another data extraction was necessary because the library holidays did not contain all the necessary holidays necessary to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`
 For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
+
+The conclusion of the data analysis is that there was no correlation between Brazillian interest rate and inflation rate, so a model with these two variable wouldn't be a good mode.
 
 The detailed ETL planning can be found in `notebooks/ETL_planning.ipynb` (em português, `notebooks/ETL_planejamento.ipynb`)
 The detaileed data analysis and modelling tentative can be found in `notebooks/Data_Analysis.ipynb` file (em português, `notebooks/ETL_planejamento.ipynb`)
 
 You can visualize these notebooks by having [Jupyter](https://docs.jupyter.org/en/latest/) installed or using [Google Colab](https://colab.research.google.com/). 
 
-
-## Project Summary
-This project can be divided into two part:
-How the ETL 
-
-
+## What is next
+Leverage AWS lambda for the ETL.  
+A dashboard using dash.  
 
 ## Project Structure
 
 ```
 .
-├── Analise_de_Dados.ipynb
-├── Data_Analysis.ipynb
 ├── Dockerfile
-├── ETL_planejamento.ipynb
-├── ETL_planning.ipynb
 ├── README.md
+├── airflow
+│   ├── airflow.cfg
+│   └── airflow.db
 ├── dados
 │   ├── feriados.csv
 │   ├── selic.tsv
@@ -44,14 +46,20 @@ How the ETL
 ├── etl_scripts
 │   ├── __init__.py
 │   └── pipeline.py
-├── requirements_airflow.txt
+├── notebooks
+│   ├── Analise_de_Dados.ipynb
+│   ├── Data_Analysis.ipynb
+│   ├── ETL_planejamento.ipynb
+│   ├── ETL_planning.ipynb
+│   └── requirements-notebooks.txt
+├── requirements-airflow.txt
 ├── scrap
 │   ├── scrap_feriados.py
 │   └── selic_scrapper
 │       ├── requirements.txt
 │       └── selic_scrapper.py
-├── setup.py
-└── setup_airflow.sh
+├── setup-airflow.sh
+└── setup.py
 ```
 
 ## Dictionaries
@@ -113,8 +121,8 @@ How the ETL
 
 ![etl](etl-airflow.png)
 
-The way I designed the ETL requires you to have docker installed.
-You can start by creating a virtual environment using venv or virtualenv
+The way I designed the ETL requires you to have docker installed.  
+You can start by creating a virtual environment either with built-in venv or virtualenv.
 
 ```bash
 python3 -m venv econvenv
@@ -127,7 +135,7 @@ Then you can run setup_airflow.sh
 bash setup-airflow.sh
 ```
 
-Once the above script is finished, you can check the available dags ys
+Once the above script is finished, you can check the available dags with the following
 ```bash
 airflow dags list
 ```
@@ -136,5 +144,5 @@ You can now create an user and run the airflow webserver or use the standalone v
 ```bash
 airflow standalone
 ```
-The standalone will generate an user and a password. 
+The standalone will generate an user and a password.   
 For further information check [Airflow Docs](https://airflow.apache.org/docs/)
