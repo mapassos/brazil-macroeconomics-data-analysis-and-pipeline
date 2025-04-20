@@ -4,16 +4,18 @@
 The main objective of this project is to analyze both the interest rate (taxa selic) and inflation rate (IPCA) of Brazil and possibly create a simple predictive model. To support this, another goal was to create an ETL pipeline.
 
 ## Project Summary
+
+This project consists of two main parts: ETL and Data Analysis.  
 ### ETL
-This project consists into two main parts: ETL and the Data Analysis.  
-The ETL pipeline was developed because the data analysis required pulling data from their respective soutive. Therefore, the ETL goals were to:
+ 
+An ETL pipeline was developed because the data analysis required pulling data from their respective sources. Therefore, the ETL goals were to:
 * retrieve up-to-date data
 * clean, transform and create the mothly and annual data
 * and load each data into a tsv file.
 
-One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose dockerize this step.  
-Another data extraction was necessary because the library holidays did not contain all the necessary holidays necessary to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`
-For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
+One of the data sources required the use of Selenium to extract the data. Since I wanted to reduce the dependencies and isolate this process, I chose dockerize this step.  
+Another data extraction was necessary because the library holidays did not contain all the necessary holidays necessary to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`.  
+For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.  
 
 ### Data Analysis
 The conclusion of the data analysis was that there was no significant correlation between Brazillian interest rate and inflation rate, so a model using only these two variables would not be effective.
