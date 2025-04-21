@@ -23,7 +23,7 @@ def etl():
 
         @task.bash
         def extract_selic_tofile():
-            return f'echo -e $(docker run --rm scrap) > {WORK_ENV}/dados/selic.tsv'
+            return f'echo -e $(docker run --rm scrap) > {WORK_ENV}/data/selic.tsv'
 
         build_selic_image() >> extract_selic_tofile()
 
@@ -32,25 +32,25 @@ def etl():
     def extract_ipca():
         @task.bash()
         def download_ipca():
-            return f'curl -o {WORK_ENV}/dados/ipca.zip https://ftp.ibge.gov.br/Precos_Indices_de_Precos_ao_Consumidor/IPCA/Serie_Historica/ipca_SerieHist.zip'
+            return f'curl -o {WORK_ENV}/data/ipca.zip https://ftp.ibge.gov.br/Precos_Indices_de_Precos_ao_Consumidor/IPCA/Serie_Historica/ipca_SerieHist.zip'
 
         @task.bash()
         def get_ipca_filename():
-            return f'unzip -l {WORK_ENV}/dados/ipca.zip | grep -oE ipca.*\\.xls'
+            return f'unzip -l {WORK_ENV}/data/ipca.zip | grep -oE ipca.*\\.xls'
 
         ipca_filename = get_ipca_filename()
 
         @task.bash()
         def unzip_ipca():
-            return f'unzip -oq {WORK_ENV}/dados/ipca.zip -d {WORK_ENV}/dados'
+            return f'unzip -oq {WORK_ENV}/data/ipca.zip -d {WORK_ENV}/data'
 
         @task.bash()
         def rename_ipca(filename: str):
-            return f'mv {WORK_ENV}/dados/{filename} {WORK_ENV}/dados/ipca.xls' 
+            return f'mv {WORK_ENV}/data/{filename} {WORK_ENV}/data/ipca.xls' 
 
         @task.bash()
         def remove_leftover():
-            return f'rm {WORK_ENV}/dados/ipca.zip'
+            return f'rm {WORK_ENV}/data/ipca.zip'
 
         download_ipca() >> ipca_filename >> unzip_ipca() >> rename_ipca(ipca_filename) >> remove_leftover()  
 

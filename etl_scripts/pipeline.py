@@ -230,7 +230,7 @@ def save_to_csv(df: pd.DataFrame, path: str):
 def run_pipeline():
     WORK_ENV = os.getenv('WORK_ENV')
 
-    DATA_PATH = os.path.join(WORK_ENV, 'dados')
+    DATA_PATH = os.path.join(WORK_ENV, 'data')
 
     selic_df = read_selic(
         path = os.path.join(DATA_PATH, 'selic.tsv')

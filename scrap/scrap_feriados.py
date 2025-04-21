@@ -85,7 +85,7 @@ def main():
             right_index = True
     )
 
-    feriados_df.to_csv('../dados/feriados.csv', index = False)
+    feriados_df.to_csv('../data/feriados.csv', index = False)
 
 if __name__ == '__main__':
     main()
