@@ -36,14 +36,13 @@ A dashboard using dash.
 .
 ├── Dockerfile
 ├── README.md
-├── dados
+├── dags
+│   └── etl_dag.py
+├── data
 │   ├── feriados.csv
 │   ├── selic.tsv
 │   ├── selic_ipca_ano.tsv
-│   ├── selic_ipca_mes.tsv
-│   └── selic_transformacao_preliminar.tsv
-├── dags
-│   └── etl_dag.py
+│   └── selic_ipca_mes.tsv
 ├── etl-airflow.png
 ├── etl_scripts
 │   ├── __init__.py
