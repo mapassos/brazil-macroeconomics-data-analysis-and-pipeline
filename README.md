@@ -137,7 +137,7 @@ source econvenv/Scripts/activate
 Then you can run setup_airflow.sh 
 
 ```bash
-./setup-airflow.sh
+source ./setup-airflow.sh
 ```
 
 Once the above script is finished, you can check the available dags
@@ -145,7 +145,17 @@ Once the above script is finished, you can check the available dags
 airflow dags list
 ```
 
-You can now create an user and run the airflow webserver or use the standalone version 
+Start the scheduler
+```bash
+airflow scheduler -D
+```
+
+Start the webserver 
+```bash
+airflow webserver -D
+```
+
+Use the standalone version  
 ```bash
 airflow standalone
 ```
