@@ -1,5 +1,6 @@
-#This is a faster way to set up the Airflow pipeline for testting.
 #!/bin/bash
+#This is a faster way to set up the Airflow pipeline for testting.
+
 
 mkdir airflow && \
 pip install . && \
