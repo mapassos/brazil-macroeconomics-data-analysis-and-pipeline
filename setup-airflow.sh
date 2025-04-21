@@ -1,4 +1,5 @@
-#This is a faster way to set up the Airflow pipeline for testing purposes.
+#!/bin/bash
+#This is a faster way to set up the Airflow pipeline for testting.
 
 
 mkdir airflow && \

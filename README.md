@@ -13,9 +13,9 @@ An ETL pipeline was developed because the data analysis required pulling data fr
 * clean, transform and create the mothly and annual data
 * and load each data into a tsv file.
 
-One of the data sources required the use of Selenium to extract the data. Since I wanted to reduce the dependencies and isolate this process, I chose dockerize this step.  
-Another data extraction was necessary because the library holidays did not contain all the necessary holidays necessary to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`.  
-For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.  
+One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose to dockerize this step.  
+Another data extraction was necessary because the library holidays did not contain all the necessary holidays necessary to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`
+For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
 
 ### Data Analysis
 The conclusion of the data analysis was that there was no significant correlation between Brazillian interest rate and inflation rate, so a model using only these two variables would not be effective.
@@ -136,7 +136,7 @@ source econvenv/Scripts/activate
 Then you can run setup_airflow.sh 
 
 ```bash
-bash setup-airflow.sh
+source ./setup-airflow.sh
 ```
 
 Once the above script is finished, you can check the available dags
@@ -144,7 +144,17 @@ Once the above script is finished, you can check the available dags
 airflow dags list
 ```
 
-You can now create an user and run the airflow webserver or use the standalone version 
+Start the scheduler
+```bash
+airflow scheduler -D
+```
+
+Start the webserver 
+```bash
+airflow webserver -D
+```
+
+Use the standalone version  
 ```bash
 airflow standalone
 ```
