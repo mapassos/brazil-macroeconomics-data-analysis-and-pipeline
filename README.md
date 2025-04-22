@@ -14,7 +14,7 @@ An ETL pipeline was developed because the data analysis required pulling data fr
 * and load each data into a tsv file.
 
 One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose to dockerize this step.  
-Another data extraction was necessary because the library holidays did not contain all the necessary holidays to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`
+Another data extraction was necessary because the library holidays did not contain all the necessary holidays to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`.  
 For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
 
 ### Data Analysis
