@@ -22,7 +22,7 @@ The conclusion of the data analysis was that there was no significant correlatio
 
 ### More information
 The detailed ETL planning can be found in `notebooks/ETL_planning.ipynb` (em português, `notebooks/ETL_planejamento.ipynb`).   
-The in-depth data analysis can be found in `notebooks/Data_Analysis.ipynb` (em português, `notebooks/ETL_planejamento.ipynb`).    
+The in-depth data analysis can be found in `notebooks/Data_Analysis.ipynb` (em português, `notebooks/Analise_de_Dados.ipynb`).    
 
 You can view these notebooks by using [Jupyter](https://docs.jupyter.org/en/latest/) or [Google Colab](https://colab.research.google.com/). 
 
