@@ -18,7 +18,7 @@ Another data extraction was necessary because the library holidays did not conta
 For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
 
 ### Data Analysis
-The conclusion of the data analysis was that there was no significant correlation between Brazillian interest rate and inflation rate, so a model using only these two variables would not be effective.
+The conclusion of the data analysis was that there was no significant correlation between Brazilian interest rate and inflation rate, so a model using only these two variables would not be effective.
 
 ### More information
 The detailed ETL planning can be found in `notebooks/ETL_planning.ipynb` (em português, `notebooks/ETL_planejamento.ipynb`).   
@@ -74,7 +74,7 @@ A dashboard using dash.
 | reuniao_vies              | The indicated bias for the upcoming change in the target interest rate. This change may be implemented in accordance with the bias, at any time. <br/> (Indicativo de tendência de mudança da taxa Selic. Essa mudança pode ser feita na meta, na direção do viés, para a taxa Selic a qualquer momento entre as reuniões ordinárias.)     |
 | periodo_vigencia          | The time period which the target interest rate is /was in place.<br/> (Periodo em que a meta selic fica vigente.)  |     
 | meta_selic_pctaa          | The established annual interest rate, set as a reference.<br/> (Meta de juros (anual) como referência)     |
-| tban_pctam                | The Brazillian Central Bank Assistance Rate was an instrument that is charged on loans when banks do not have government bonds to offer as collateral or when they exceed the credit limits of the line that uses the Central Bank's Basic Rate. <br/>(Taxa de Assistência do Banco Central: foi uma taxa cobrada em empréstimos quando bancos não possuem títulos públicos para oferecer como garantia, ou quando superam os limites de crédito da linha que utiliza a Taxa Básica do banco central. A TBAN foi criada em 28/8/96 e extinta em 4/3/99.) |
+| tban_pctam                | The Brazilian Central Bank Assistance Rate was an instrument that is charged on loans when banks do not have government bonds to offer as collateral or when they exceed the credit limits of the line that uses the Central Bank's Basic Rate. <br/>(Taxa de Assistência do Banco Central: foi uma taxa cobrada em empréstimos quando bancos não possuem títulos públicos para oferecer como garantia, ou quando superam os limites de crédito da linha que utiliza a Taxa Básica do banco central. A TBAN foi criada em 28/8/96 e extinta em 4/3/99.) |
 | taxa_selic_pct            | The weighted and adjusted average of the daily financing transactions calculated by the SELIC (a Special Settlement and Custody System) to the one-day repurchase operations backed by government bonds and accumulated over the period. <br/> (Taxa média ponderada e ajustada dos financiamentos diários apurados no Sistema Especial de Liquidação e de Custódia (Selic) para operações compromissadas de um dia (overnight) lastreadas em títulos públicos federais, acumulada no período. Títulos públicos são títulos emitidos pelo governo federal e são utilizados por ele para se financiar.) |
 | taxa_selic_pctaa          | The annual interest rate based on 252 working days <br/>(Taxa selic anualizada com base em 252 dias úteis.)|
 
@@ -84,7 +84,7 @@ A dashboard using dash.
 |-----------------------|------------------------------|
 | ano                   | 4-digit numeric Year <br/> (Ano numérico)    |
 | mes                   | Three-first-letters of the respective month's name  <br/>(Nome do mês limitado a três letras)    |
-| ipca_numero_indice    | Weighted arithmetic average of the 16 monthly average Brazillian metropolitan indeces, computed using the Laspeyres Formula <br/>(Média aritmética ponderada dos 16 índices metropolitanos mensais, que são calculados pela fórmula de Laspeyres.) |       
+| ipca_numero_indice    | Weighted arithmetic average of the 16 monthly average Brazilian metropolitan indeces, computed using the Laspeyres Formula <br/>(Média aritmética ponderada dos 16 índices metropolitanos mensais, que são calculados pela fórmula de Laspeyres.) |       
 | ipca_var_mensal       | Monthly variation of the IPCA index over a month <br/> (Variação mensal do índice durante o mês.)  |            
 | ipca_var_trimestral   | Quarterly variation of the index considering the last 3 months <br/> (Variação trimestral do índice considerando os últimos 3 meses.)   |
 | ipca_var_semetral     | Six-month change in the index over the last 6 months. <br/> (Variação semestral do índice considerando os últimos 6 meses.)    |
