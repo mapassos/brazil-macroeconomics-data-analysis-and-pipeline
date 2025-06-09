@@ -218,16 +218,15 @@ def merge_dfs(
     df_left: pd.DataFrame, 
     df_right: pd.DataFrame, 
     link_col: str
-) -> pd.DataFrame:
-    
+) -> pd.DataFrame:    
     merged_df = df_left.merge(df_right, how='inner', on=link_col)
-    
+
     return merged_df
 
-def save_to_csv(df: pd.DataFrame, path: str):
-    df.to_csv(path, sep = '\t', index = False)
+def save_to_csv(df: pd.DataFrame, path: str, sep: str):
+    df.to_csv(path, sep = sep, index = False)
 
-def run_pipeline():
+def run_pipeline() -> tuple[list[str]]:
     WORK_ENV = os.getenv('WORK_ENV')
 
     DATA_PATH = os.path.join(WORK_ENV, 'data')
@@ -265,9 +264,15 @@ def run_pipeline():
         'selic_acumulada_ano', 
         'ipca_acumulado_ano'
     ]]
+    
+    filepaths = (
+        os.path.join(DATA_PATH, 'selic_ipca_mes.tsv'), 
+        os.path.join(DATA_PATH, 'selic_ipca_ano.tsv'),
+    )
 
-    save_to_csv(df_mensal, os.path.join(DATA_PATH, 'selic_ipca_mes.tsv'))
-    save_to_csv(df_anual, os.path.join(DATA_PATH, 'selic_ipca_ano.tsv'))
+    for df, filepath in zip((df_mensal, df_anual), filepaths): save_to_csv(df, filepath, '\t')
+
+    return filepaths
 
 
 if __name__ == '__main__':
