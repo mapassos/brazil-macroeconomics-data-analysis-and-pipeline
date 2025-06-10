@@ -26,10 +26,6 @@ The in-depth data analysis can be found in `notebooks/Data_Analysis.ipynb` (em p
 
 You can view these notebooks by using [Jupyter](https://docs.jupyter.org/en/latest/) or [Google Colab](https://colab.research.google.com/). 
 
-## What is next
-ETL with AWS.  
-A dashboard using dash.  
-
 ## Project Structure
 
 ```

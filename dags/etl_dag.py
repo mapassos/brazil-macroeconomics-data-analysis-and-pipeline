@@ -16,7 +16,8 @@ AWS_DEFAULT_REGION = os.getenv('AWS_DEFAULT_REGION')
 @dag(
     'etl-scrap',
     schedule = '@monthly',
-    start_date = datetime(2025, 3, 20)
+    start_date = datetime(2025, 3, 20),
+    catchup=False,
 )
 def etl():
 
