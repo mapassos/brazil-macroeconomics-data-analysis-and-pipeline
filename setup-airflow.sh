@@ -3,6 +3,7 @@
 
 
 mkdir airflow && \
+pip install . && \
 pip install -r airflow-requirements.txt && \
 pip install apache-airflow==2.10.5 && \
 eval $(cat .env) export $(cat .env | cut -d '=' -f1) && \

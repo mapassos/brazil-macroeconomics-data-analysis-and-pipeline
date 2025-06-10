@@ -33,9 +33,10 @@ A dashboard using dash.
 ## Project Structure
 
 ```
-.
 ├── Dockerfile
+├── LICENSE
 ├── README.md
+├── airflow-requirements.txt
 ├── dags
 │   └── etl_dag.py
 ├── data
@@ -53,7 +54,6 @@ A dashboard using dash.
 │   ├── ETL_planejamento.ipynb
 │   ├── ETL_planning.ipynb
 │   └── requirements-notebooks.txt
-├── requirements-airflow.txt
 ├── scrap
 │   ├── scrap_feriados.py
 │   └── selic_scrapper
@@ -62,6 +62,7 @@ A dashboard using dash.
 ├── setup-airflow.sh
 └── setup.py
 ```
+
 
 ## Dictionaries
 
@@ -129,7 +130,7 @@ You can start by creating a virtual environment either with built-in venv or vir
 
 ```bash
 python3 -m venv econvenv
-source econvenv/Scripts/activate
+source econvenv/bin/activate
 ```
 
 Then you can run setup_airflow.sh 
