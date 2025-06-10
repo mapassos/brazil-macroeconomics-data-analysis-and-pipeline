@@ -10,7 +10,7 @@ setup(
     },
     install_requires=[
         'pandas==2.0.0',
-        'numpy>=1.20.1',
+        'numpy==1.26.1',
         'xlrd==2.0.1'
     ],
 )
