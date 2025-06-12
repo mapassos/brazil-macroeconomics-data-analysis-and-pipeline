@@ -70,7 +70,7 @@ def etl():
     @task(task_id='load')
     def load(paths):
         if isinstance(paths, str):
-            paths = (paths)
+            paths = [paths]
 
         for path in paths:
             s3 = boto3.client(
