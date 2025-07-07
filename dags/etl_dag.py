@@ -96,7 +96,7 @@ def etl():
                 df.to_csv(buffer, index = False)
                 s3.Object(
                     BUCKET_NAME, 
-                    f'{schema}/{table}'
+                    f'{schema}/{table}.csv'
                 ).put(Body = buffer.getvalue())
 
     extract_selic() >> extract_ipca() >> transformed_data_paths >> check_aws_credentials() >> load(transformed_data_paths)

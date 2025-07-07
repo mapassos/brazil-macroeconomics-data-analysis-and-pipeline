@@ -134,7 +134,7 @@ source econvenv/bin/activate
 Then you can run setup_airflow.sh 
 
 ```bash
-source ./setup-airflow.sh
+source setup-airflow.sh
 ```
 
 Once the above script is finished, you can check the available dags

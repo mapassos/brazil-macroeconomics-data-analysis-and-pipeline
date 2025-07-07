@@ -168,5 +168,3 @@ def run(paths: tuple[str]) -> dict[str, tuple] :
         
     return loaded_tabs
 
-if __name__ == '__main__':
-    print(run(['../data/selic_ipca_ano.tsv']))
