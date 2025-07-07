@@ -226,7 +226,7 @@ def merge_dfs(
 def save_to_csv(df: pd.DataFrame, path: str, sep: str):
     df.to_csv(path, sep = sep, index = False)
 
-def run_pipeline() -> tuple[list[str]]:
+def run() -> tuple[list[str]]:
     WORK_ENV = os.getenv('WORK_ENV')
 
     DATA_PATH = os.path.join(WORK_ENV, 'data')
@@ -276,4 +276,4 @@ def run_pipeline() -> tuple[list[str]]:
 
 
 if __name__ == '__main__':
-    run_pipeline()
+    run()

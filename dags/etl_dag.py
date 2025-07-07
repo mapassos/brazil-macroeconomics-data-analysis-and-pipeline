@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 from airflow.decorators import dag, task, task_group
 
-from etl_scripts import pipeline
+from data_pipeline import transform_jobs, load_jobs
+from data_pipeline.db_utils import PostgresDB
+from io import StringIO
 import pandas as pd
 import boto3
 import os
@@ -53,7 +55,7 @@ def etl():
 
     @task(task_id= 'transform')
     def transform():
-        return pipeline.run_pipeline()
+        return transformations.run()
 
     transformed_data_paths = transform() 
 
@@ -68,20 +70,36 @@ def etl():
 
         
     @task(task_id='load')
-    def load(paths):
+    def load(paths: list | str):
         if isinstance(paths, str):
             paths = [paths]
 
-        for path in paths:
-            s3 = boto3.client(
-                "s3",
-                aws_access_key_id= AWS_ACCESS_KEY_ID,
-                aws_secret_access_key = AWS_SECRET_ACCESS_KEY, 
-                region_name = AWS_DEFAULT_REGION
-            )
-            
-            fname = os.path.basename(path)
-            s3.upload_file(path, BUCKET_NAME, fname)
+        loaded_schemas = db_loader.run(paths)
+
+        s3 = boto3.resource(
+            "s3",
+            aws_access_key_id= AWS_ACCESS_KEY_ID,
+            aws_secret_access_key = AWS_SECRET_ACCESS_KEY,
+            region_name = AWS_DEFAULT_REGION
+        )
+
+        pgdb = PostgresDB()
+        engine = pgdb.init_engine()
+
+        for schema in loaded_schemas:
+            for table in loaded_schemas.get(schema):
+                buffer = StringIO()
+                df = pd.read_sql_query(
+                    f'SELECT * FROM {schema}.{table}',
+                    con = engine
+                )
+                df.to_csv(buffer)
+                s3.resource.Object(
+                    BUCKET_NAME, 
+                    f'{schema}/{table}'
+                ).put(Body = buffer.getvalues())
+
+    
 
     extract_selic() >> extract_ipca() >> transformed_data_paths >> check_aws_credentials() >> load(transformed_data_paths)
 

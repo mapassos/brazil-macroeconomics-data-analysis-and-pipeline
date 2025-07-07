@@ -1,4 +1,7 @@
 from __future__ import annotations
+import os
+
+DELIMITER = os.getenv('DELIMITER')
 
 def scrap_selic() -> list[list[str]]:
     '''
@@ -46,7 +49,7 @@ def scrap_selic() -> list[list[str]]:
 
 def main() -> int:
     for line in scrap_selic():
-        print('\\t'.join(line) + '\\n')
+        print(DELIMITER.join(line) + '\\n')
     return 0
 
 if __name__ == '__main__':
