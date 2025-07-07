@@ -154,5 +154,5 @@ Use the standalone version
 ```bash
 airflow standalone
 ```
-The standalone will generate an user and a password.    
+The standalone will generate an user and a password. Load the page http://localhost:8080/   
 For more information check [Airflow Docs](https://airflow.apache.org/docs/).
