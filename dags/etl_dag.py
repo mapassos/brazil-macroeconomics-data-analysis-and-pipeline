@@ -55,7 +55,7 @@ def etl():
 
     @task(task_id= 'transform')
     def transform():
-        return transformations.run()
+        return transform_jobs.run()
 
     transformed_data_paths = transform() 
 
@@ -74,7 +74,7 @@ def etl():
         if isinstance(paths, str):
             paths = [paths]
 
-        loaded_schemas = db_loader.run(paths)
+        loaded_schemas = load_jobs.run(paths)
 
         s3 = boto3.resource(
             "s3",
@@ -93,13 +93,11 @@ def etl():
                     f'SELECT * FROM {schema}.{table}',
                     con = engine
                 )
-                df.to_csv(buffer)
-                s3.resource.Object(
+                df.to_csv(buffer, index = False)
+                s3.Object(
                     BUCKET_NAME, 
                     f'{schema}/{table}'
-                ).put(Body = buffer.getvalues())
-
-    
+                ).put(Body = buffer.getvalue())
 
     extract_selic() >> extract_ipca() >> transformed_data_paths >> check_aws_credentials() >> load(transformed_data_paths)
 

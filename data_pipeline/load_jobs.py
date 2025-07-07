@@ -1,5 +1,5 @@
 import pandas as pd
-from db_utils import PostgresDB, Engine
+from .db_utils import PostgresDB, Engine
 
 pgdb = PostgresDB()
 pgdb.init_engine()
@@ -55,7 +55,7 @@ def data_modeling(path: str, data: str) -> tuple[dict[str, pd.DataFrame]]:
     else:
         indicadores_fato = df[[
             'id_ano',
-            'meta_selic_ano',
+            'meta_acumulada_ano',
             'selic_acumulada_ano',
             'ipca_acumulado_ano'
         ]]
@@ -169,4 +169,4 @@ def run(paths: tuple[str]) -> dict[str, tuple] :
     return loaded_tabs
 
 if __name__ == '__main__':
-    print(run(['../data/selic_ipca_mes.tsv']))
+    print(run(['../data/selic_ipca_ano.tsv']))
