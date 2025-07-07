@@ -27,8 +27,8 @@ The in-depth data analysis can be found in `notebooks/Data_Analysis.ipynb` (em p
 You can view these notebooks by using [Jupyter](https://docs.jupyter.org/en/latest/) or [Google Colab](https://colab.research.google.com/). 
 
 ## Project Structure
-
 ```
+.
 ├── Dockerfile
 ├── LICENSE
 ├── README.md
@@ -40,10 +40,12 @@ You can view these notebooks by using [Jupyter](https://docs.jupyter.org/en/late
 │   ├── selic.tsv
 │   ├── selic_ipca_ano.tsv
 │   └── selic_ipca_mes.tsv
-├── etl-airflow.png
-├── etl_scripts
+├── data_pipeline
 │   ├── __init__.py
-│   └── pipeline.py
+│   ├── db_utils.py
+│   ├── load_jobs.py
+│   └── transform_jobs.py
+├── etl-airflow.png
 ├── notebooks
 │   ├── Analise_de_Dados.ipynb
 │   ├── Data_Analysis.ipynb
