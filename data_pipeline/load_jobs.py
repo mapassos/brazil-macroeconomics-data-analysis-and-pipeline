@@ -88,7 +88,7 @@ def load_todb(
             if_exists = 'append', 
             index = False
         )
-        pgdb.run_sql(
+        pgdb.sql(
             f'''MERGE INTO {schema}.{name} AS target
             USING {schema}.{temp_tab} AS temp
             ON target.{key} = temp.{key}
@@ -113,13 +113,14 @@ def run(paths: tuple[str]) -> dict[str, tuple] :
     Run load process and return the loaded tabs for each created schemas
     '''
     engine = pgdb.engine
+    loaded_tab = {}
 
     for schema in paths: 
         pgdb.sql(
-            'CREATE SCHEMA IF NOT EXISTS {schema};'
+            f'CREATE SCHEMA IF NOT EXISTS {schema};'
         )
 
-        tables = data_modeling(path, schema)
+        tables = data_modeling(paths.get(schema), schema)
         key = 'id_' + schema
 
         schema_tables = pgdb.schema_tables(schema) 

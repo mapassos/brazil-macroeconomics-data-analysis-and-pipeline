@@ -270,7 +270,7 @@ def run() -> dict[str, str]:
         'ano' : os.path.join(DATA_PATH, 'selic_ipca_ano.tsv'),
     }
 
-    for df, filepath in zip((df_mensal, df_anual), filepaths): save_to_csv(df, filepath, '\t')
+    for df, filepath in zip((df_mensal, df_anual), filepaths.values()): save_to_csv(df, filepath, '\t')
 
     return filepaths
 
