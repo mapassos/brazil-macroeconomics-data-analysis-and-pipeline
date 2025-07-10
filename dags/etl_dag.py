@@ -70,10 +70,7 @@ def etl():
 
         
     @task(task_id='load')
-    def load(paths: list | str):
-        if isinstance(paths, str):
-            paths = [paths]
-
+    def load(paths: dict[str, str]):
         loaded_schemas = load_jobs.run(paths)
 
         s3 = boto3.resource(

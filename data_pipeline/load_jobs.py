@@ -4,7 +4,7 @@ from .db_utils import PostgresDB, Engine
 pgdb = PostgresDB()
 pgdb.init_engine()
 
-def data_modeling(path: str, data: str) -> tuple[dict[str, pd.DataFrame]]:
+def data_modeling(path: str, schema: str) -> tuple[dict[str, pd.DataFrame]]:
     '''
     Model the data as star schema
 
@@ -16,7 +16,7 @@ def data_modeling(path: str, data: str) -> tuple[dict[str, pd.DataFrame]]:
             dtype_backend='pyarrow'
     )
 
-    if data == 'mes':
+    if schema == 'mes':
         df['periodo_mes'] = pd.Series(
             pd.PeriodIndex(df['periodo_mes'], freq = 'M')\
                 .to_timestamp(how = 'e')\
@@ -26,18 +26,16 @@ def data_modeling(path: str, data: str) -> tuple[dict[str, pd.DataFrame]]:
         df['mes_numerico'] = df['periodo_mes'].dt.month
     
     #create surrogate key
-    df['id_' + data] = pd.Series(
+    df['id_' + schema] = pd.Series(
         range(1, 1 + len(df)),
         dtype= 'int32[pyarrow]'
     )
     
-    df[['ano', 'decada']] = df[['ano', 'decada']].astype('int32[pyarrow]')
-    
-    if not data == 'mes': data = 'acumulado_' + data
-    
-    df['ipca_' + data] = df['ipca_' + data].astype('float32[pyarrow]')
+    df[['ano', 'decada']] = df[['ano', 'decada']].astype('int32[pyarrow]')    
 
-    if data == 'mes':
+    if schema == 'mes':
+        df['ipca_mes'] = df['ipca_mes'].astype('float32[pyarrow]')
+        
         indicadores_fato = df[[
             'id_mes',
             'meta_acumulada_mes',
@@ -53,6 +51,9 @@ def data_modeling(path: str, data: str) -> tuple[dict[str, pd.DataFrame]]:
             'decada'
         ]]
     else:
+        df['ipca_acumulado_ano'] = df['ipca_acumulado_ano']\
+                .astype('float32[pyarrow]')
+
         indicadores_fato = df[[
             'id_ano',
             'meta_acumulada_ano',
@@ -87,7 +88,7 @@ def load_todb(
             if_exists = 'append', 
             index = False
         )
-        pgdb.run_statement(
+        pgdb.run_sql(
             f'''MERGE INTO {schema}.{name} AS target
             USING {schema}.{temp_tab} AS temp
             ON target.{key} = temp.{key}
@@ -95,7 +96,7 @@ def load_todb(
             INSERT ({', '.join(table.columns)})
             VALUES ({', '.join('temp.'+col for col in table.columns)});'''
         )
-        pgdb.run_statement(
+        pgdb.sql(
             f'DROP TABLE {schema}.{temp_tab};'
         )
         
@@ -112,23 +113,15 @@ def run(paths: tuple[str]) -> dict[str, tuple] :
     Run load process and return the loaded tabs for each created schemas
     '''
     engine = pgdb.engine
-    pgdb.run_statement(
-        'CREATE SCHEMA IF NOT EXISTS "mensal";\
-        CREATE SCHEMA IF NOT EXISTS "anual";'
-    )
- 
-    loaded_tabs = {}
 
-    for path in paths:
-        if 'mes' in path:
-            tables = data_modeling(path, 'mes')
-            schema = 'mensal'
-            key = 'id_mes'
-        else:
-            tables = data_modeling(path, 'ano')
-            schema = 'anual'
-            key = 'id_ano'
-        
+    for schema in paths: 
+        pgdb.sql(
+            'CREATE SCHEMA IF NOT EXISTS {schema};'
+        )
+
+        tables = data_modeling(path, schema)
+        key = 'id_' + schema
+
         schema_tables = pgdb.schema_tables(schema) 
         loaded_tabs[schema] = []
 
@@ -154,12 +147,12 @@ def run(paths: tuple[str]) -> dict[str, tuple] :
                     )
     
                     if 'dimensao' in name:
-                        pgdb.run_statement(
+                        pgdb.sql(
                             f'ALTER TABLE {schema}.{name}\
                             ADD PRIMARY KEY ({key});'
                         )
                     else:
-                        pgdb.run_statement(
+                        pgdb.sql(
                             f'''ALTER TABLE {schema}.{name}
                                 ADD CONSTRAINT fk_data
                                     FOREIGN KEY ({key})

@@ -24,7 +24,7 @@ class PostgresDB():
         return self.engine
         
 
-    def run_statement(self, statement: str):
+    def sql(self, statement: str):
         with self.engine.begin() as con:
             con.exec_driver_sql(
                 statement

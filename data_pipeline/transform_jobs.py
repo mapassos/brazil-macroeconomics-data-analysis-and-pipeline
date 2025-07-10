@@ -226,7 +226,7 @@ def merge_dfs(
 def save_to_csv(df: pd.DataFrame, path: str, sep: str):
     df.to_csv(path, sep = sep, index = False)
 
-def run() -> tuple[list[str]]:
+def run() -> dict[str, str]:
     WORK_ENV = os.getenv('WORK_ENV')
 
     DATA_PATH = os.path.join(WORK_ENV, 'data')
@@ -265,10 +265,10 @@ def run() -> tuple[list[str]]:
         'ipca_acumulado_ano'
     ]]
     
-    filepaths = (
-        os.path.join(DATA_PATH, 'selic_ipca_mes.tsv'), 
-        os.path.join(DATA_PATH, 'selic_ipca_ano.tsv'),
-    )
+    filepaths = {
+        'mes': os.path.join(DATA_PATH, 'selic_ipca_mes.tsv'), 
+        'ano' : os.path.join(DATA_PATH, 'selic_ipca_ano.tsv'),
+    }
 
     for df, filepath in zip((df_mensal, df_anual), filepaths): save_to_csv(df, filepath, '\t')
 
