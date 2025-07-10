@@ -113,7 +113,7 @@ def run(paths: tuple[str]) -> dict[str, tuple] :
     Run load process and return the loaded tabs for each created schemas
     '''
     engine = pgdb.engine
-    loaded_tab = {}
+    loaded_tabs = {}
 
     for schema in paths: 
         pgdb.sql(
