@@ -12,8 +12,7 @@ An ETL pipeline was developed because the data analysis required pulling data fr
 * clean, transform and create the mothly and annual data
 * and load each data into a tsv file, a local database and AWS. 
 
-One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose to dockerize this step.  
-Another data extraction was necessary because the library holidays did not contain all the necessary holidays to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`.  
+One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose to dockerize this step.    
 For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
 
 ## Project Structure
@@ -36,7 +35,6 @@ For the ETL orchestration, I used Airflow for scheduling and monitoring workflow
 │   └── transform_jobs.py
 ├── etl-airflow.png
 ├── scrap
-│   ├── scrap_feriados.py
 │   └── selic_scrapper
 │       ├── requirements.txt
 │       └── selic_scrapper.py
