@@ -10,7 +10,7 @@ I was insterested in analyzing both the interest rate (taxa selic) and inflation
 An ETL pipeline was developed because the data analysis required pulling data from their respective sources. Therefore, the ETL goals were to:
 * retrieve up-to-date data
 * clean, transform and create the mothly and annual data
-* and load each data into a tsv file.
+* and load each data into a tsv file, a local database and AWS. 
 
 One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose to dockerize this step.  
 Another data extraction was necessary because the library holidays did not contain all the necessary holidays to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`.  
