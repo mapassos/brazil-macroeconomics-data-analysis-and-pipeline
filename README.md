@@ -1,35 +1,24 @@
-# ETL Pipeline and Data Analysis of Brazilian Interest and Inflation Rates. </br> (ETL Pipeline e Analise de Dados da taxa de juros e inflação do Brasil.)
+# ETL Pipeline . </br> (ETL Pipeline)
 
 ## Project Description
-The main objective of this project is to analyze both the interest rate (taxa selic) and inflation rate (IPCA) of Brazil and possibly create a simple predictive model. To support this, another goal was to create an ETL pipeline.
+I was insterested in analyzing both the interest rate (taxa selic) and inflation rate (IPCA) of Brazil, so I made this pipeline to retrieve data and play around with airflow, AWS and relational databases
 
 ## Project Summary
 
-This project consists of two main parts: ETL and Data Analysis.  
 ### ETL
  
 An ETL pipeline was developed because the data analysis required pulling data from their respective sources. Therefore, the ETL goals were to:
 * retrieve up-to-date data
 * clean, transform and create the mothly and annual data
-* and load each data into a tsv file.
+* and load each data into a tsv file, a local database and AWS. 
 
 One of the data sources required the use of Selenium. Since I wanted to reduce the dependencies and isolate this process, I chose to dockerize this step.  
 Another data extraction was necessary because the library holidays did not contain all the necessary holidays to accumulate the data over a month or year. The script for this can be found in `scrap/feriados.py`.  
 For the ETL orchestration, I used Airflow for scheduling and monitoring workflows.
 
-### Data Analysis
-The conclusion of the data analysis was that there was no significant correlation between Brazilian interest rate and inflation rate, so a model using only these two variables would not be effective.
-
-### More information
-The detailed ETL planning can be found in `notebooks/ETL_planning.ipynb` (em português, `notebooks/ETL_planejamento.ipynb`).   
-The in-depth data analysis can be found in `notebooks/Data_Analysis.ipynb` (em português, `notebooks/Analise_de_Dados.ipynb`).    
-
-You can view these notebooks by using [Jupyter](https://docs.jupyter.org/en/latest/) or [Google Colab](https://colab.research.google.com/). 
-
 ## Project Structure
 ```
 .
-├── Dockerfile
 ├── LICENSE
 ├── README.md
 ├── airflow-requirements.txt
@@ -46,12 +35,6 @@ You can view these notebooks by using [Jupyter](https://docs.jupyter.org/en/late
 │   ├── load_jobs.py
 │   └── transform_jobs.py
 ├── etl-airflow.png
-├── notebooks
-│   ├── Analise_de_Dados.ipynb
-│   ├── Data_Analysis.ipynb
-│   ├── ETL_planejamento.ipynb
-│   ├── ETL_planning.ipynb
-│   └── requirements-notebooks.txt
 ├── scrap
 │   ├── scrap_feriados.py
 │   └── selic_scrapper
