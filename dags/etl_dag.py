@@ -25,7 +25,7 @@ def etl():
 
     @task.bash(task_id='extract_selic')
     def extract_selic():
-        return f'echo -e $(docker run --rm mapass/selic-scrapper) > {WORK_ENV}/data/selic.tsv'
+        return f'echo -e $(docker run --rm mapassos/get-selic-data) > {WORK_ENV}/data/selic.tsv'
 
     @task_group(group_id='extract_ipca')
     def extract_ipca():
