@@ -3,4 +3,7 @@ suporte/
 old-ver/
 etl_scripts.egg-info/
 .ipynb_checkpoints/
+Dockerfile
 econvenv/
+notebooks
+
