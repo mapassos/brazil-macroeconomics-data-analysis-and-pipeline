@@ -1,4 +1,4 @@
-# ETL Pipeline . </br> (ETL Pipeline)
+# Selic IPCA ETL Pipeline . </br> (ETL Pipeline)
 
 ## Project Description
 I was insterested in analyzing both the interest rate (taxa selic) and inflation rate (IPCA) of Brazil, so I made this pipeline to retrieve data and play around with airflow, AWS and relational databases
